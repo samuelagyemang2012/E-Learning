@@ -1,0 +1,93 @@
+# User routeswith app.app_context():
+#     # your code here
+#     db.create_all()
+##########################################################################
+
+#########################################################################
+
+# Graph routes
+########################################################################
+# base_0 = "/graph"
+#
+#
+# @app.post(base_0 + "/upload_book")
+# def upload_book():
+#     file = request.files['file']
+#     extension = file.filename.split(".")[1]
+#
+#     if extension == "xml" or extension == "XML":
+#         file.save(app.config['UPLOAD_FOLDER'] + file.filename.lower())
+#         g.parse_xml(UPLOADS_PATH + file.filename, json_path + file.filename.split(".")[0] + ".json")
+#         flash("Your graph is ready!", "success")
+#         session['cur_path'] = file.filename.split(".")[0] + ".json"
+#         session['cur_name'] = file.filename.split(".")[0]
+#
+#         return redirect(url_for("index"))
+#
+#     else:
+#         flash("Please upload an xml file", "error")
+#         return redirect(url_for("index"))
+#
+#
+# @app.get("/view_graph")
+# def view_graph():
+#     # return json_path+session['cur_path']
+#     if request.accept_mimetypes.best == "application/json":
+#         json_data = g.display_graph(json_path + session['cur_path'], "dd", False)
+#         return str(json_data)
+#
+#     return render_template('graph.html')
+#
+#
+# @app.get("/graph/<name>")
+# def view_a_graph(name):
+#     if request.accept_mimetypes.best == "application/json":
+#         json_data = g.display_graph(json_path + name.lower() + ".json", "dd", False)
+#         print(json_data)
+#         return str(json_data)
+#
+#     return render_template('graph_.html', book_id=name.lower())
+#
+#
+# @app.get("/ask_wiki/<query>")
+# def ask_wiki(query):
+#     result = wiki.summary(query)
+#     return {"summary": result}
+#
+#
+# @app.get("/explore_graphs")
+# def explore_graphs():
+#     files = os.listdir(UPLOADS_PATH)
+#     for i in range(len(files)):
+#         files[i] = files[i].split(".")[0].capitalize()
+#
+#     return render_template('explore_graphs.html', data=files)
+#
+#
+# # Embedding
+# ############################################################################################
+# @app.get("/get_similarity")
+# def get_graph_similarity():
+#     if request.accept_mimetypes.best == "application/json":
+#         books = request.args["data"].split("-")
+#
+#         doc1 = g.get_book_content(json_path + books[0].lower() + ".json")
+#         doc2 = g.get_book_content(json_path + books[1].lower() + ".json")
+#
+#         cosim = e.get_similarity(doc1, doc2)
+#         cosim = cosim.item()
+#
+#         return {"title1": books[0].capitalize(),
+#                 "title2": books[1].capitalize(),
+#                 "doc1": doc1,
+#                 "doc2": doc2,
+#                 "score": round(cosim, 2)
+#                 }
+#
+#     files = os.listdir(UPLOADS_PATH)
+#     for i in range(len(files)):
+#         files[i] = files[i].split(".")[0].capitalize()
+#     return render_template('similarity.html', data=files)
+#
+
+#############################################################################################

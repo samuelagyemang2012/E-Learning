@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br>
+<div class="container-fluid">
+    <div class="row" style="height:auto">
+        <div class="col-sm-4" style="background-color:#eee; text-align:center;padding:1%;box-shadow: -1px 1px 7px #575757;">
+            <div>
+                <h3>
+                    <small class="text-muted">Summary</small>
+                </h3>
+                <hr>
+                <p id="summary" style="text-align:justify"></p>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div id="mynetwork" style="width:100%;"></div>
+        </div>
+
+        <div class="col-sm-4" style="background-color:#eee; text-align:center;padding:1%;box-shadow: 1px 1px 7px #575757;">
+            <div>
+                <h3>
+                    <small class="text-muted">das{{data}}</small>
+                </h3>
+                <hr>
+            </div>
+
+            <div>
+                <h3>
+                    <blockquote class="blockquote">
+                        <p class="mb-0" style="text-align:center;" id="node_data"></p>
+                    </blockquote>
+                </h3>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+
+      let xhr = new XMLHttpRequest();
+
+      xhr.onreadystatechange = function() {
+
+      if (xhr.readyState === 4) {
+        json_data = xhr.responseText;
+        json_data = JSON.parse(json_data)
+        results = parse_data(json_data)
+        nodes = results[0]
+        edges = results[1]
+
+        drawGraph(nodes, edges);
+
+      }
+    }
+    xhr.open("GET", "/graph/{{book_id}}",true);
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.send();
+
+
+</script>
+{% endblock %}
+
+
+

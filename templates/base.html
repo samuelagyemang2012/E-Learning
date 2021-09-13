@@ -1,0 +1,33 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/mycss.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css"/>
+    <script type="text/javascript" src="static/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"></script>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+    <a class="navbar-brand" href="/" style="padding: 0.5%;">Graphs </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
+
+<main role="main" class="container">
+    {% block content %}
+    {% endblock %}
+</main>
+<script type="text/javascript" src="/static/js/main.js"></script>
+
+
+</body>
+
+</html>

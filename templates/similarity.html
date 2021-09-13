@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!--cards-->
+<div class="container">
+    <h3 style="text-align: center;">Select 2 books to get similarity</h3>
+    <br><br>
+    <div class="col-sm-12" style="height: 25%; overflow-y: scroll;">
+        <div class="row">
+            {% for d in data %}
+            <div class="card" style="width:20%; margin:1%">
+                <div class="card-body">
+                    <h5 class="card-title">{{d}}</h5>
+                    <p class="card-text"></p>
+                    <input class="form-check-input checkbox" type="checkbox" value="{{d}}" id="{{d}}"
+                           onclick="get_selected(this)" name="checkbox">
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<br>
+<!--button-->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <a class="btn btn-lg btn-success" onclick="get_sim()">Start &raquo;</a>
+        </div>
+    </div>
+</div>
+<br>
+<!--content-->
+<div class="container">
+    <div class="row">
+
+        <div class="col-sm-5" style="border: 1px solid #eee; padding:0.5%">
+            <h3 align="center" id="title1"></h3>
+            <div>
+                <p id="doc1"></p>
+            </div>
+        </div>
+
+        <div class="col-sm-5" style="border: 1px solid #eee; padding:0.5%">
+            <h3 align="center" id="title2"></h3>
+            <div>
+                <p id="doc2"></p>
+            </div>
+        </div>
+
+    </div>
+</div>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <h4>Similarity Score:</h4>
+        </div>
+
+        <div class="col-sm-1">
+            <p id="score" style="font-size:25px"></p>
+        </div>
+    </div>
+    <!--            <h4>Similarity Score</h4>-->
+    <!--            <h1>Similarity Score</h1>-->
+</div>
+
+<script>
+data = [];
+//--------------------------------
+
+function test() {
+  for (var i = 0; i < data.length; i++) {
+    console.log(data.length);
+    console.log(data[i]);
+  }
+}
+
+function get_selected(me) {
+
+  if (data.includes(me.id) === false) {
+    if (data.length < 2) {
+      data.push(me.id);
+      return
+    }
+  }
+
+  if (data.includes(me.id) === true) {
+    delete_item(data, me.id);
+    return
+  }
+}
+
+//----------------------------------
+function delete_item(arr, value) {
+  var index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+}
+
+function get_sim(){
+  if(data.length < 2){
+    alert("please select 2 books")
+  }
+  else{
+    var checkboxes = document.getElementsByName('checkbox');
+    for (var checkbox of checkboxes) {
+        checkbox.checked = false;
+    }
+    console.log("Similarity of "+data[0]+" and "+data[1])
+    //
+    let xhr = new XMLHttpRequest();
+
+      xhr.onreadystatechange = function() {
+
+      if (xhr.readyState === 4) {
+        json_data = xhr.responseText;
+        json_data = JSON.parse(json_data)
+
+        document.getElementById("title1").innerHTML = json_data["title1"]
+        document.getElementById("title2").innerHTML = json_data["title2"]
+        document.getElementById("doc1").innerHTML = json_data["doc1"]
+        document.getElementById("doc2").innerHTML = json_data["doc2"]
+        document.getElementById("score").innerHTML = json_data["score"]
+
+
+      }
+    }
+    xhr.open("GET", "/get_similarity?data="+data[0]+"-"+data[1],true);
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.send();
+
+    //
+    data.length = 0
+   }
+ }
+
+
+
+
+
+
+
+
+
+
+
+</script>
+{% endblock %}

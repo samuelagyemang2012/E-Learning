@@ -1,0 +1,14 @@
+#mynetwork {
+    width: 500px;
+    height: 500px;
+    background-color: #ffffff;
+    border: 1px solid lightgray;
+    position: relative;
+    float: left;
+}
+
+.index_box{
+    border-radius: 2%;
+    background-color: #eee;
+    padding: 5%
+}

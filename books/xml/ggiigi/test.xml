@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="Electron" modified="2021-08-24T17:49:13.400Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/13.9.9 Chrome/85.0.4183.121 Electron/10.1.5 Safari/537.36" etag="DLLhdie3bQ7CpqBSFVeq" version="13.9.9" type="device">
+  <diagram id="e6kkXLQRppqgVLFcIziF" name="Page-1">
+    <mxGraphModel dx="1024" dy="592" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="pYJcN2ttn5eyaa-xiqg2-1" value="A" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pYJcN2ttn5eyaa-xiqg2-2" value="C" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="390" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pYJcN2ttn5eyaa-xiqg2-3" value="B" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="390" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pYJcN2ttn5eyaa-xiqg2-4" value="" style="endArrow=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="pYJcN2ttn5eyaa-xiqg2-2" target="pYJcN2ttn5eyaa-xiqg2-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="330" as="sourcePoint" />
+            <mxPoint x="440" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pYJcN2ttn5eyaa-xiqg2-5" value="" style="endArrow=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="pYJcN2ttn5eyaa-xiqg2-3" target="pYJcN2ttn5eyaa-xiqg2-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="370" as="sourcePoint" />
+            <mxPoint x="460" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 style="text-align: center;">All Books</h1>
+    <br><br>
+    <div class="container">
+        <div class="col-sm-12">
+            <!--         Cards start           -->
+            <div class="row">
+
+                {% for d in data %}
+                <div class="card" style="width:20%; margin:1%">
+                    <div class="card-body">
+                        <h5 class="card-title">{{d}}</h5>
+                        <p class="card-text"></p>
+<!--                        {{d}}-->
+                        <a href="/graph/{{d}}" class="btn btn-primary">Explore</a>
+                    </div>
+                </div>
+                {% endfor %}
+                <!--       Cards End             -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

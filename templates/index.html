@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 style="text-align: center;">Graphs</h1>
+    <br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 index_box">
+                <p class="lead">Please upload a book in XML format</p>
+
+                <form method="POST" action="/upload_book" enctype="multipart/form-data">
+                    <div>
+                        <input type="file" name="file" required>
+                    </div>
+                    <br>
+                    <div>
+                        <button class="btn btn-lg btn-primary" role="f">Upload &raquo;</button>
+                    </div>
+                </form>
+
+                {% with success = get_flashed_messages(category_filter=["success"]) %}
+                {% if success %}
+                <div>
+                    <a class="btn btn-lg btn-success" href="/view_graph">View Graph &raquo;</a>
+                </div>
+                {% endif%}
+                {% endwith %}
+            </div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-5 index_box">
+                <p class="lead">Explore all books</p>
+                <a class="btn btn-lg btn-primary" href="/explore_graphs" role="button">Explore
+                    &raquo;</a>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5">
+                {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                {% if errors %}
+                <span>
+                    <div class="alert alert-danger" role="alert">{{ errors[0] }}</div>
+                </span>
+                {% endif %}
+                {% endwith %}
+
+                {%with success = get_flashed_messages(category_filter=["success"]) %}
+                {% if success %}
+                <span>
+                    <div class="alert alert-success" role="alert">{{ success[0] }}</div>
+                </span>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 index_box">
+                <p class="lead">Check Graph Content Similarity</p>
+                <div>
+                    <a class="btn btn-lg btn-success" href="/get_similarity">Start &raquo;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Notifications-->
+
+</div>
+{% endblock %}
