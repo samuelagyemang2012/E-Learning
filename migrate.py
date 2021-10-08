@@ -6,12 +6,12 @@ init_db()
 print("Tables created")
 
 # Create Roles
-role_model = RoleModel()
-teacher = Role("teacher")
-student = Role('student')
-
-role_model.create(teacher)
-role_model.create(student)
-
-print("Roles added")
+# role_model = RoleModel()
+# teacher = Role("teacher")
+# student = Role('student')
+#
+# role_model.create(teacher)
+# role_model.create(student)
+#
+# print("Roles added")
 

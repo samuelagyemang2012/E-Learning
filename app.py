@@ -1,6 +1,4 @@
 import os
-
-import wikipediaapi
 from flask import Flask, session
 from flask import render_template, flash, request, redirect, url_for
 from engine.graphs import Graphs
@@ -15,12 +13,12 @@ import validation.validation as v
 # from engine.embeddings import Embeddings
 # from models import book_migration, user_migration, chapter_migration, roles_migration
 # from routes import role_routes
-import wikipediaapi
 import config
 import re
 
 json_path = join(dirname(realpath(__file__)), "books\\json\\")
 UPLOADS_PATH = join(dirname(realpath(__file__)), 'books\\xml\\')
+SUBMISSION_PATH = join(dirname(realpath(__file__)), 'submissions\\')
 cur_file = ""
 
 # flask
@@ -35,8 +33,6 @@ app.config['UPLOAD_FOLDER'] = UPLOADS_PATH
 g = Graphs()
 # Embedding object
 # e = Embeddings()
-# Wikipedia object
-wiki = wikipediaapi.Wikipedia('en')
 
 # user model
 user_model = UserModel()
@@ -85,7 +81,7 @@ def index():
             if role_id == 1:
                 return redirect(url_for('teacher_dashboard'))
             else:  # student
-                return "student"
+                return redirect(url_for('student_dashboard'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -224,8 +220,13 @@ def view_students():
     students = user_model.get_students()
     return render_template('UI/teacher/students/view_students.html', data=students)
 
+
 # ---------------------------------------------------------------------
+@app.route('/student/dashboard')
+def student_dashboard():
+    return render_template('UI/student/dashboard.html')
 
 
+# ---------------------------------------------------------------------
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

@@ -14,5 +14,5 @@ def init_db():
     # they will be registered properly on the metadata.  Otherwise
     # you will have to import them first before calling init_db()
 
-    from migrations import book_migration, chapter_migration, roles_migration, user_migration
+    from migrations import book_migration, chapter_migration, roles_migration, user_migration, submission_migration
     Base.metadata.create_all(bind=engine)
