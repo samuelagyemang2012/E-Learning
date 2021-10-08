@@ -15,7 +15,7 @@ class BookModel:
         pass
 
     def all(self):
-        return 'sam'
+        return Book.query.all()
 
     def get(self, id):
         user = Book.query.filter_by(id=id).first()

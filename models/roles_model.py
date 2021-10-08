@@ -18,8 +18,8 @@ class RoleModel:
         return 'sam'
 
     def get(self, id):
-        user = Role.query.filter_by(id=id).first()
-        return user
+        roles = Role.query.filter_by(id=id).first()
+        return roles
 
     def update(self, id):
         pass

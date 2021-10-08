@@ -15,7 +15,7 @@ class ChapterModel:
         pass
 
     def all(self):
-        return 'sam'
+        return Chapter.query.all()
 
     def get(self, id):
         chapter = Chapter.query.filter_by(id=id).first()

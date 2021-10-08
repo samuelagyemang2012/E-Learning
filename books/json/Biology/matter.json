@@ -1,0 +1,108 @@
+{
+    "nodes": [
+        [
+            "eTrGZqnOBNI-MTFAcBlH-18",
+            "Matter"
+        ],
+        [
+            "eTrGZqnOBNI-MTFAcBlH-19",
+            "Atom"
+        ],
+        [
+            "eTrGZqnOBNI-MTFAcBlH-20",
+            "Isotopes"
+        ],
+        [
+            "eTrGZqnOBNI-MTFAcBlH-21",
+            "Ions"
+        ],
+        [
+            "eTrGZqnOBNI-MTFAcBlH-22",
+            "Isotopes"
+        ],
+        [
+            "eTrGZqnOBNI-MTFAcBlH-23",
+            "Molecules"
+        ],
+        [
+            "eTrGZqnOBNI-MTFAcBlH-29",
+            "Water"
+        ],
+        [
+            "eTrGZqnOBNI-MTFAcBlH-30",
+            "Carbon"
+        ]
+    ],
+    "pairs": [
+        [
+            {
+                "source_id": "eTrGZqnOBNI-MTFAcBlH-19",
+                "source": "Atom"
+            },
+            {
+                "target_id": "eTrGZqnOBNI-MTFAcBlH-18",
+                "target": "Matter"
+            }
+        ],
+        [
+            {
+                "source_id": "eTrGZqnOBNI-MTFAcBlH-20",
+                "source": "Isotopes"
+            },
+            {
+                "target_id": "eTrGZqnOBNI-MTFAcBlH-18",
+                "target": "Matter"
+            }
+        ],
+        [
+            {
+                "source_id": "eTrGZqnOBNI-MTFAcBlH-21",
+                "source": "Ions"
+            },
+            {
+                "target_id": "eTrGZqnOBNI-MTFAcBlH-18",
+                "target": "Matter"
+            }
+        ],
+        [
+            {
+                "source_id": "eTrGZqnOBNI-MTFAcBlH-22",
+                "source": "Isotopes"
+            },
+            {
+                "target_id": "eTrGZqnOBNI-MTFAcBlH-18",
+                "target": "Matter"
+            }
+        ],
+        [
+            {
+                "source_id": "eTrGZqnOBNI-MTFAcBlH-23",
+                "source": "Molecules"
+            },
+            {
+                "target_id": "eTrGZqnOBNI-MTFAcBlH-18",
+                "target": "Matter"
+            }
+        ],
+        [
+            {
+                "source_id": "eTrGZqnOBNI-MTFAcBlH-29",
+                "source": "Water"
+            },
+            {
+                "target_id": "eTrGZqnOBNI-MTFAcBlH-23",
+                "target": "Molecules"
+            }
+        ],
+        [
+            {
+                "source_id": "eTrGZqnOBNI-MTFAcBlH-30",
+                "source": "Carbon"
+            },
+            {
+                "target_id": "eTrGZqnOBNI-MTFAcBlH-23",
+                "target": "Molecules"
+            }
+        ]
+    ]
+}

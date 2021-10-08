@@ -1,4 +1,6 @@
 import os
+
+import wikipediaapi
 from flask import Flask, session
 from flask import render_template, flash, request, redirect, url_for
 from engine.graphs import Graphs
@@ -13,7 +15,7 @@ import validation.validation as v
 # from engine.embeddings import Embeddings
 # from models import book_migration, user_migration, chapter_migration, roles_migration
 # from routes import role_routes
-import wikipedia as wiki
+import wikipediaapi
 import config
 import re
 
@@ -33,6 +35,8 @@ app.config['UPLOAD_FOLDER'] = UPLOADS_PATH
 g = Graphs()
 # Embedding object
 # e = Embeddings()
+# Wikipedia object
+wiki = wikipediaapi.Wikipedia('en')
 
 # user model
 user_model = UserModel()
@@ -189,6 +193,39 @@ def add_book():
         return render_template('UI/teacher/books/add.html', success='Book added')
 
 
+@app.route('/teacher/books')
+def view_books():
+    books = book_model.all()
+    return render_template('UI/teacher/books/view_books.html', data=books)
+
+
+@app.route('/teacher/book/chapters/<id>')
+def view_chapter(id):
+    chapters = book_controller.get_chapters(id)
+    return render_template('UI/teacher/books/chapters.html', data=chapters)
+
+
+@app.route('/teacher/book/chapter/graph/<chapter>/<id>')
+def view_graph(chapter, id):
+    chapter_data = chapter_model.get(id)
+    book = book_model.get(chapter_data.book_id)
+
+    data_path = json_path + book.name + "/" + chapter + ".json"
+
+    if request.accept_mimetypes.best == "application/json":
+        json_data = g.display_graph(data_path, "dd", False)
+        return str(json_data)
+
+    return render_template('UI/teacher/graph.html', data=chapter.capitalize())
+
+
+@app.route('/teacher/students')
+def view_students():
+    students = user_model.get_students()
+    return render_template('UI/teacher/students/view_students.html', data=students)
+
 # ---------------------------------------------------------------------
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

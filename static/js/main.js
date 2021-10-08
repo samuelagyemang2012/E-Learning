@@ -4,7 +4,9 @@ var nodes;
 var network;
 var container;
 var options, data;
-var is_hidden = true
+var is_hidden = false
+
+var wiki_endpoint = "https://en.wikipedia.org/api/rest_v1/page/summary/"
 
 function parse_data(data) {
     nodes = []
@@ -16,18 +18,18 @@ function parse_data(data) {
         if(i==0){
             nodes[0] = { "id": nn[i], "label": nn[i], "shape": "dot", "size": 10, "hidden":false}
         } else{
-            var n = { "id": nn[i], "label": nn[i], "shape": "dot", "size": 10,  "hidden":true }
+            var n = { "id": nn[i], "label": nn[i], "shape": "dot", "size": 10,  "hidden":false }
             nodes[i] = n
         }
     }
 
     for (var i = 0; i < ee.length; i++) {
-        var e = { "id": i, "from": ee[i]["from"], "to":ee[i]["to"],"hidden":true}
+        var e = { "id": i, "from": ee[i]["from"], "to":ee[i]["to"],"hidden":false}
         edges[i] = e
     }
 
 
-    return [nodes, edges] //data["Edges"]]
+    return [nodes, edges]
 }
 
 function get_edges(network, node,nodes){
@@ -49,7 +51,7 @@ if(is_hidden){
         network.body.data.edges.update([{"id": eid, "hidden":is_hidden}])
        }
     }else{
-    is_hidden = true
+    is_hidden = false
         for(var i=0; i<children_nodes.length; i++){
          nid = children_nodes[i]
         eid = children_edges[i]
@@ -107,29 +109,36 @@ function drawGraph(nodes, edges) {
     network = new vis.Network(container, data, options);
     network.on( 'click', function(properties) {
 
-
-    document.getElementById("summary").innerHTML = "<h4 style='text-align:center'>Loading</h4>"
-
     var ids = properties.nodes;
     var clickedNodes = nodes.get(ids);
      if(clickedNodes[0]["label"]){
-
-            document.getElementById("node_data").innerHTML = clickedNodes[0]["label"]
+//            alert(clickedNodes[0]["label"])
+            document.getElementById("node_title").innerHTML = clickedNodes[0]["label"]
+            document.getElementById("node_data").innerHTML = "<p style='text-align:center'>Loading</p>"
 
         get_edges(network, clickedNodes[0],data.nodes)
-//            -----------------------------------------------------------------------------------
-    let xhr = new XMLHttpRequest();
 
+
+
+//            -----------------------------------------------------------------------------------
+     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
 
             if (xhr.readyState === 4) {
-                json_data = xhr.responseText;
-                json_data = JSON.parse(json_data)
+                response = xhr.responseText;
+                response = JSON.parse(response)
 
-                document.getElementById("summary").innerHTML = json_data["summary"]
+                if (response["extract"]){
+                    document.getElementById("node_data").innerHTML = "<p style='text-align:justify'>"+response["extract"]+"</p>"
+                }else{
+                    document.getElementById("node_data").innerHTML = "<p style='text-align:justify'>Error loading data</p>"
+                }
+//                    alert()
+
       }
     }
-    xhr.open("GET", "/ask_wiki/"+clickedNodes[0]["label"],true);
+//    xhr.open("GET", "/ask_wiki/"+clickedNodes[0]["label"],true);
+    xhr.open("GET", wiki_endpoint+clickedNodes[0]["label"].replace(/\s+/g, '_'),true);
     xhr.setRequestHeader('Accept', 'application/json');
     xhr.send();
 //            -----------------------------------------------------------------------------------

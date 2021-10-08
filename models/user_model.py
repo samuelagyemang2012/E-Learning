@@ -25,5 +25,13 @@ class UserModel:
         user = User.query.filter_by(id=id).first()
         return user
 
+    def get_students(self):
+        students = User.query.filter_by(role_id=2).all()
+        return students
+
+    def get_teachers(self):
+        teachers = User.query.filter_by(role_id=1).all()
+        return teachers
+
     def update(self, id):
         pass
