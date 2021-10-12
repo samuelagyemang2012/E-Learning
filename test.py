@@ -3,6 +3,7 @@ from models.user_model import User, UserModel
 from models.book_model import Book, BookModel
 from models.roles_model import Role, RoleModel
 from models.chapter_model import Chapter, ChapterModel
+from models.submission_model import Submission, SubmissionModel
 from controllers.user_controller import UserController
 from controllers.book_controller import BookController
 from controllers.chapter_controller import ChapterController
@@ -18,14 +19,19 @@ book_cont = BookController()
 chapter_model = ChapterModel()
 chapter_cont = ChapterController()
 
+submissions_model = SubmissionModel()
+
 role_model = RoleModel
 
 chapters = book_cont.get_chapters(1)
 
 students = user_model.get_students()
 
-for s in students:
-    print(s.name)
+user = user_model.get(2)
+pending = submissions_model.teacher_get_pending(user.name)
+for p in pending:
+    print(p.student + "|" + p.b_name + "|" + p.c_name + "|"+p.s_name)
+
 
 # books = book_model.all()
 # for b in books:

@@ -201,3 +201,31 @@ function hide_element(id){
         el.style.visibility == 'hidden'
     }
 }
+
+function fetch_chapters(obj){
+
+    var idz = obj.value
+
+    let xhr = new XMLHttpRequest();
+
+      xhr.onreadystatechange = function() {
+
+      if (xhr.readyState === 4) {
+        json_data = xhr.responseText;
+        json_data = JSON.parse(json_data)
+
+    chapters = document.getElementById("chapter_id")
+    chapters.innerHTML=""
+      for (var i = 0; i < json_data.length; i++){
+        var o = document.createElement("option");
+        o.text = json_data[i]["name"];
+        o.value = json_data[i]["id"]
+
+        chapters.appendChild(o)
+      }
+      }
+    }
+    xhr.open("GET", "/student/add_submission?chapter_id="+idz,true);
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.send();
+}

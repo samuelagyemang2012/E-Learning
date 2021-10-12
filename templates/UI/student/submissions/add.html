@@ -1,0 +1,73 @@
+{% extends "UI/student/student_base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+
+                    <div class="p-4">
+                        <div class="text-center">
+                            {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                            {% for message in messages %}
+                            <h6 class="h6 text-primary">{{message}}</h6>
+                            {% endfor %}
+                            {% endif %}
+                            {% endwith %}
+                            <h6 class="h6 text-success">{{success}}</h6>
+                            <h1 class="h4 text-gray-900 mb-4">Submit Graph</h1>
+                        </div>
+                        <form class="user" method="post" action="/student/add_submission" enctype="multipart/form-data">
+
+                            <div class="form-group">
+                                <div>
+                                    <select name="teacher_id" class="form-control" id="teacher_id" required>
+                                        <option></option>
+                                        {% for t in teachers %}
+                                        <option value="{{t.name}}">{{t.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <select name="books_id" class="form-control" id="books_id"
+                                            onchange="fetch_chapters(this)">
+                                        <option></option>
+                                        {% for b in books %}
+                                        <option value="{{b.id}}">{{b.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <select name="chapter_id" type="text" class="form-control" id="chapter_id">
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input name="file" type="file" class="form-control form-control-user"
+                                       style="border: none" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-user btn-block">
+                                Submit
+                            </button>
+                        </form>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {% endblock %}

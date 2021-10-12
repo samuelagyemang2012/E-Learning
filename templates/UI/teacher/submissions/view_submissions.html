@@ -7,26 +7,30 @@
     <div class="card shadow mb-4">
         <div class="card-body">
             <div class="table-responsive">
+                <h5 class="text-center">Pending Submissions</h5>
                 <table class="table" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                     <tr>
-                        <th>Student ID</th>
-                        <th>Name</th>
-                        <th>Actions</th>
+                        <th>Student</th>
+                        <th>Book</th>
+                        <th>Chapter</th>
+                        <th>Submission Date</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
 
                     <tbody>
-                    {% for d in data %}
+                    {% for p in data %}
                     <tr>
-                        <td>{{d.student_id}}</td>
-                        <td>{{d.name}}</td>
+                        <td>{{p.student.capitalize()}}</td>
+                        <td>{{p.b_name.capitalize()}}</td>
+                        <td>{{p.c_name.capitalize()}}</td>
+                        <td>{{p.created_on.strftime('%d-%m-%Y')}}</td>
                         <td>
-                            <a href="/teacher/book/chapters/{{d.id}}" class="btn-sm btn-primary">View Submissions</a>
+                            <a href="/teacher/book/chapters/" class="btn-sm btn-primary">Check Similarity</a>
                         <td>
                     </tr>
                     {% endfor %}
-
                     </tbody>
                 </table>
             </div>

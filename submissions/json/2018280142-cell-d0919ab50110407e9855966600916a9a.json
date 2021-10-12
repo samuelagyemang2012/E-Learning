@@ -1,0 +1,52 @@
+{
+    "nodes": [
+        [
+            "sEyHIZ0REUxzUX1yMMed-19",
+            "Biological Cell"
+        ],
+        [
+            "sEyHIZ0REUxzUX1yMMed-21",
+            "Prokaryotic Cells"
+        ],
+        [
+            "sEyHIZ0REUxzUX1yMMed-22",
+            "Eukaryotic Cells"
+        ],
+        [
+            "sEyHIZ0REUxzUX1yMMed-23",
+            "Endomembrane System"
+        ]
+    ],
+    "pairs": [
+        [
+            {
+                "source_id": "sEyHIZ0REUxzUX1yMMed-19",
+                "source": "Biological Cell"
+            },
+            {
+                "target_id": "sEyHIZ0REUxzUX1yMMed-21",
+                "target": "Prokaryotic Cells"
+            }
+        ],
+        [
+            {
+                "source_id": "sEyHIZ0REUxzUX1yMMed-19",
+                "source": "Biological Cell"
+            },
+            {
+                "target_id": "sEyHIZ0REUxzUX1yMMed-22",
+                "target": "Eukaryotic Cells"
+            }
+        ],
+        [
+            {
+                "source_id": "sEyHIZ0REUxzUX1yMMed-19",
+                "source": "Biological Cell"
+            },
+            {
+                "target_id": "sEyHIZ0REUxzUX1yMMed-23",
+                "target": "Endomembrane System"
+            }
+        ]
+    ]
+}

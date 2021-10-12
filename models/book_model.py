@@ -21,5 +21,6 @@ class BookModel:
         user = Book.query.filter_by(id=id).first()
         return user
 
+
     def update(self, id):
         pass
