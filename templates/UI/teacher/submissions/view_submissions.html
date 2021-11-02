@@ -27,7 +27,7 @@
                         <td>{{p.c_name.capitalize()}}</td>
                         <td>{{p.created_on.strftime('%d-%m-%Y')}}</td>
                         <td>
-                            <a href="/teacher/book/chapters/" class="btn-sm btn-primary">Check Similarity</a>
+                            <a href="/teacher/submissions/check_similarity/{{p.id}}" class="btn-sm btn-primary">Check Similarity</a>
                         <td>
                     </tr>
                     {% endfor %}

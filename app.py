@@ -232,9 +232,23 @@ def view_submissions():
     return render_template('UI/teacher/submissions/view_submissions.html', data=submissions)
 
 
-@app.route('/teacher/check_similarity')
-def check_similarity():
-    return 'similarity'
+@app.route('/teacher/submissions/check_similarity/<id>')
+def check_similarity(id):
+    submission = submission_model.get(id)
+    student = user_model.get(submission.student_id)
+    book = book_model.get(submission.book_id)
+    chapter = chapter_model.get(submission.chapter_id)
+
+    teacher_file_path = JSON_PATH + book.name + "/" + chapter.name + ".json"
+    student_file_path = SUBMISSION_PATH + submission.name + ".json"
+
+    if request.accept_mimetypes.best == "application/json":
+        teacher_data = g.display_graph(teacher_file_path, "dd", False)
+        student_data = g.display_graph(student_file_path, "dd", False)
+
+        return {"teacher_data": teacher_data, "student_data": student_data}
+
+    return render_template('UI/teacher/submissions/check_similarity.html')
 
 
 # ---------------------------------------------------------------------
