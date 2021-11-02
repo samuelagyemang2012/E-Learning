@@ -1,0 +1,31 @@
+{% extends "UI/teacher/teacher_base.html" %}
+
+{% block content %}
+
+<div>
+    Similarity Page<br>
+    {{book}} <br>
+    {{chapter}} <br>
+</div>
+
+
+<script>
+    xx = []
+    function getData(url) {
+        return axios.get(url).then(response => response.data)
+    }
+
+    yy = getData("/teacher/check_similarity/{{book}}/{{chapter}}")
+    .then(function(res){
+        docs=[]
+
+        for(i=0;i<res.length;i++){
+             xx.push(axios.get(wiki_endpoint+res[i]).then(res=>{docs += res.data['extract']+"\n"}))
+        }
+
+    })
+
+console.log(xx)
+
+</script>
+{% endblock %}

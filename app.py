@@ -232,9 +232,21 @@ def view_submissions():
     return render_template('UI/teacher/submissions/view_submissions.html', data=submissions)
 
 
-@app.route('/teacher/check_similarity')
-def check_similarity():
-    return 'similarity'
+@app.route('/teacher/check_similarity/<book>/<chapter>')
+def check_similarity(book, chapter):
+    wiki_data = []
+    doc1 = g.get_book_content(JSON_PATH + book.capitalize() + "/" + chapter + ".json")
+    doc2 = ""
+    topics = doc1.split("\n")
+    for t in topics[0:len(topics)-1]:
+        t = t.strip()
+        t = t.replace(" ", "_")
+        wiki_data.append(t)
+
+    if request.accept_mimetypes.best == "application/json":
+        return json.dumps(wiki_data)
+
+    return render_template('UI/teacher/submissions/similarity.html', book=book, chapter=chapter)
 
 
 # ---------------------------------------------------------------------

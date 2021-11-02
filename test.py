@@ -7,6 +7,7 @@ from models.submission_model import Submission, SubmissionModel
 from controllers.user_controller import UserController
 from controllers.book_controller import BookController
 from controllers.chapter_controller import ChapterController
+import urllib.request
 
 # init_db()
 
@@ -27,10 +28,10 @@ chapters = book_cont.get_chapters(1)
 
 students = user_model.get_students()
 
-user = user_model.get(2)
-pending = submissions_model.teacher_get_pending(user.name)
-for p in pending:
-    print(p.student + "|" + p.b_name + "|" + p.c_name + "|"+p.s_name)
+# user = user_model.get(2)
+# pending = submissions_model.teacher_get_pending(user.name)
+# for p in pending:
+#     print(p.student + "|" + p.b_name + "|" + p.c_name + "|"+p.s_name)
 
 
 # books = book_model.all()
@@ -57,3 +58,10 @@ for p in pending:
 # user_id, name, role_id = cont.login("","2018280142","123123")
 # print(name)
 # print(res.name)
+
+# wiki = "https://en.wikipedia.org/api/rest_v1/page/summary/Eukaryotic_Cells"
+import json
+
+s = ["a", "b", "c"]
+r = json.dumps(s)
+print(r)
