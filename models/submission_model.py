@@ -67,6 +67,7 @@ class SubmissionModel:
             add_columns(User.name.label("student"),
                         Book.name.label("b_name"),
                         Chapter.name.label("c_name"),
+                        Submission.id,
                         Submission.name.label("s_name"),
                         Submission.created_on). \
             filter(Submission.status == "pending"). \
