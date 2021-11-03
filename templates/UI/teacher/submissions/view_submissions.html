@@ -27,9 +27,13 @@
                         <td>{{p.c_name.capitalize()}}</td>
                         <td>{{p.created_on.strftime('%d-%m-%Y')}}</td>
                         <td>
-                            <a href="/teacher/check_similarity/{{p.b_name}}/{{p.c_name}}" class="btn-sm btn-primary">Check
+                            <a href="/teacher/student_submission/{{p.s_name}}" class="btn-sm btn-primary">View
+                                Graph</a>
+                            <a href="/teacher/get_similarity_data/{{p.b_name}}/{{p.c_name}}//{{p.s_name}}" class="btn-sm btn-primary">Check
                                 Similarity</a>
                         <td>
+
+
                     </tr>
                     {% endfor %}
                     </tbody>

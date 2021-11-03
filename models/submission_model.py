@@ -66,8 +66,9 @@ class SubmissionModel:
             join(Chapter, Submission.chapter_id == Chapter.id). \
             add_columns(User.name.label("student"),
                         Book.name.label("b_name"),
+                        Chapter.id.label("c_id"),
                         Chapter.name.label("c_name"),
-                        Submission.id,
+                        Submission.id.label("s_id"),
                         Submission.name.label("s_name"),
                         Submission.created_on). \
             filter(Submission.status == "pending"). \

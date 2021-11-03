@@ -178,6 +178,7 @@ def add_book():
             return render_template('UI/teacher/add.html', message='Please upload chapters')
 
         # create folders
+        title = title.capitalize()
         os.mkdir(app.config['UPLOAD_FOLDER'] + title)
         os.mkdir(JSON_PATH + title)
 
@@ -225,6 +226,17 @@ def view_graph(chapter, id):
     return render_template('UI/teacher/graph.html', chapter=chapter.capitalize(), book_id=chapter_data.book_id)
 
 
+@app.route('/teacher/student_submission/<sname>')
+def view_student_graph(sname):
+    data_path = SUBMISSION_PATH + "json\\" + sname+".json"
+
+    if request.accept_mimetypes.best == "application/json":
+        json_data = g.display_graph(data_path, "dd", False)
+        return str(json_data)
+
+    return render_template("UI/teacher/submissions/student_graph.html", data=sname)
+
+
 @app.route('/teacher/submissions')
 def view_submissions():
     user = user_model.get(int(session.get('user_id')))
@@ -232,13 +244,13 @@ def view_submissions():
     return render_template('UI/teacher/submissions/view_submissions.html', data=submissions)
 
 
-@app.route('/teacher/check_similarity/<book>/<chapter>')
-def check_similarity(book, chapter):
+@app.route('/teacher/get_similarity_data/<book>/<chapter>/<sub_name>')
+def get_similarity_data(book, chapter, sub_name):
     wiki_data = []
     doc1 = g.get_book_content(JSON_PATH + book.capitalize() + "/" + chapter + ".json")
-    doc2 = ""
+    doc2 = g.get_book_content(SUBMISSION_PATH + "json\\" + sub_name)
     topics = doc1.split("\n")
-    for t in topics[0:len(topics)-1]:
+    for t in topics[0:len(topics) - 1]:
         t = t.strip()
         t = t.replace(" ", "_")
         wiki_data.append(t)

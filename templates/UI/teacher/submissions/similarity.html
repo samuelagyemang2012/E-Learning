@@ -10,22 +10,37 @@
 
 
 <script>
-    xx = []
+
     function getData(url) {
         return axios.get(url).then(response => response.data)
     }
 
-    yy = getData("/teacher/check_similarity/{{book}}/{{chapter}}")
+    function get_similarity(doc1, doc2){
+
+    }
+
+    getData("/teacher/get_similarity_data/{{book}}/{{chapter}}")
     .then(function(res){
-        docs=[]
-
+        docs=""
+        count=0
+        ll = res.length
         for(i=0;i<res.length;i++){
-             xx.push(axios.get(wiki_endpoint+res[i]).then(res=>{docs += res.data['extract']+"\n"}))
-        }
 
-    })
+            axios.get(wiki_endpoint+res[i]).then(res=>{
+            text = res.data['extract']+'\n'
+            docs += text
+            count += 1
 
-console.log(xx)
+            if(count == ll){
+                console.log(docs)
+
+            }
+
+            })
+            }
+        })
+
+
 
 </script>
 {% endblock %}
