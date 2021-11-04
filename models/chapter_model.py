@@ -21,5 +21,9 @@ class ChapterModel:
         chapter = Chapter.query.filter_by(id=id).first()
         return chapter
 
+    def get_all_chapters_by_book_id(self, book_id):
+        chapters = Chapter.query.filter_by(book_id=book_id).all()
+        return chapters
+
     def update(self, id):
         pass

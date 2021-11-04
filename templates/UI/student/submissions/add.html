@@ -24,6 +24,7 @@
 
                             <div class="form-group">
                                 <div>
+                                    <label for="teacher_id">Teacher</label>
                                     <select name="teacher_id" class="form-control" id="teacher_id" required>
                                         <option></option>
                                         {% for t in teachers %}
@@ -35,6 +36,7 @@
 
                             <div class="form-group">
                                 <div>
+                                    <label for="books_id">Books</label>
                                     <select name="books_id" class="form-control" id="books_id"
                                             onchange="fetch_chapters(this)">
                                         <option></option>
@@ -47,6 +49,7 @@
 
                             <div class="form-group">
                                 <div>
+                                    <label for="chapter_id">Chapters</label>
                                     <select name="chapter_id" type="text" class="form-control" id="chapter_id">
                                         <option></option>
                                     </select>

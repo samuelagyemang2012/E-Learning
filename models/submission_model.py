@@ -30,6 +30,10 @@ class SubmissionModel:
         submission = Submission.query.filter_by(id=id).first()
         return submission
 
+    def get_by_name(self, sub_name):
+        submission = Submission.query.filter_by(name=sub_name).first()
+        return submission
+
     def student_get_pending(self, user_id):
         pending = Submission.query. \
             join(User, Submission.student_id == User.id). \
@@ -75,9 +79,23 @@ class SubmissionModel:
             filter(Submission.teacher == name).all()
         return pending
 
+    def get_student_submissions_by_book(self, user_id, book_id):
+        submissions = Submission.query. \
+            join(User, Submission.student_id == user_id). \
+            join(Chapter, Submission.chapter_id == Chapter.id). \
+            add_columns(Chapter.name.label("cname"),
+                        Submission.score.label("score"),
+                        Submission.updated_on.label("updated_on")
+                        ). \
+            filter(Submission.book_id == book_id).all()
+        return submissions
 
-def update(self, id):
-    pass
+    def update(self, name, status, score):
+        submission = Submission.query.filter_by(name=name).first()
+        submission.status = status
+        submission.score = score
+        # db_session.add(submission)
+        db_session.commit()
 
 # user.no_of_logins += 1
 # session.commit()

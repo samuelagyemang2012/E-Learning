@@ -226,9 +226,9 @@ def view_graph(chapter, id):
     return render_template('UI/teacher/graph.html', chapter=chapter.capitalize(), book_id=chapter_data.book_id)
 
 
-@app.route('/teacher/student_submission/<sname>')
+@app.route('/teacher/view_student_submission/<sname>')
 def view_student_graph(sname):
-    data_path = SUBMISSION_PATH + "json\\" + sname+".json"
+    data_path = SUBMISSION_PATH + "json\\" + sname + ".json"
 
     if request.accept_mimetypes.best == "application/json":
         json_data = g.display_graph(data_path, "dd", False)
@@ -244,21 +244,44 @@ def view_submissions():
     return render_template('UI/teacher/submissions/view_submissions.html', data=submissions)
 
 
-@app.route('/teacher/get_similarity_data/<book>/<chapter>/<sub_name>')
-def get_similarity_data(book, chapter, sub_name):
+@app.route('/teacher/check_similarity/<book>/<chapter>/<sub_name>')
+def check_similarity(book, chapter, sub_name):
+    submission = submission_model.get_by_name(sub_name)
+    user = user_model.get(submission.student_id)
+    student = user.name
+    return render_template('UI/teacher/submissions/similarity.html', book=book, chapter=chapter, sub=sub_name,
+                           student=student)
+
+
+@app.route('/do_similarity/<book>/<chapter>/<sub_name>')
+def do_similarity(book, chapter, sub_name):
     wiki_data = []
+    vv = []
     doc1 = g.get_book_content(JSON_PATH + book.capitalize() + "/" + chapter + ".json")
-    doc2 = g.get_book_content(SUBMISSION_PATH + "json\\" + sub_name)
+    doc2 = g.get_book_content(SUBMISSION_PATH + "json\\" + sub_name + ".json")
     topics = doc1.split("\n")
+
     for t in topics[0:len(topics) - 1]:
         t = t.strip()
         t = t.replace(" ", "_")
         wiki_data.append(t)
+    wiki_data.append(doc2)
 
     if request.accept_mimetypes.best == "application/json":
         return json.dumps(wiki_data)
+    return ''
 
-    return render_template('UI/teacher/submissions/similarity.html', book=book, chapter=chapter)
+
+@app.route('/teacher_update_submissions/<sub_name>')
+def update_submission(sub_name):
+    if request.accept_mimetypes.best == "application/json":
+        score = request.args['score']
+        status = "checked"
+
+        submission_model.update(sub_name, status, score)
+
+        print(score)
+    return ''
 
 
 # ---------------------------------------------------------------------
@@ -268,6 +291,33 @@ def get_similarity_data(book, chapter, sub_name):
 def student_view_books():
     books = book_model.all()
     return render_template('UI/student/books/view_books.html', data=books)
+
+
+@app.route('/student/book/similarity/<book_id>')
+def view_cummulative_similarity(book_id):
+    user_id = session.get('user_id')
+    book = book_model.get(book_id)
+    chapters = chapter_model.get_all_chapters_by_book_id(book_id)
+    submissions = submission_model.get_student_submissions_by_book(user_id, book_id)
+
+    book_chapters = {}
+    total_score = 0
+
+    for c in chapters:
+        book_chapters[c.name] = float(0)
+
+    for s in submissions:
+        if s.cname in book_chapters:
+            book_chapters[s.cname] = s.score
+
+    for k, v in book_chapters.items():
+        total_score += float(v)
+
+    total_score = total_score / len(book_chapters)
+
+    return render_template('UI/student/books/cumulative.html', data=book_chapters,
+                           book=book.name,
+                           score=str(total_score)+"%")
 
 
 @app.route('/student/book/chapter/graph/<chapter>/<id>')
@@ -355,5 +405,7 @@ def get_checked_submissions():
 
 
 # ---------------------------------------------------------------------
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

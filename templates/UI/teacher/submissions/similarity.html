@@ -2,43 +2,155 @@
 
 {% block content %}
 
-<div>
-    Similarity Page<br>
-    {{book}} <br>
-    {{chapter}} <br>
+<div class="container-fluid">
+    <div class="container=fluid">
+        <a style="margin-bottom:1%" href="/teacher/submissions" class="btn btn-primary">Back</a>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-12 col-lg-12">
+            <!--            Similarity-->
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Similarity Score for {{chapter.capitalize()}}</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">{{student.capitalize()}}</h6>
+
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="">
+                        <div>
+                            <h2 id="sim" align="center">Loading</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!---->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Original Graph Data</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-area" style="overflow:auto">
+                        <p id="teacher_data" style="text-align:justify">Loading</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-5 col-lg-6">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Student Graph Data</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-area" style="overflow:auto">
+                        <p id="student_data" style="text-align:justify">Loading</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 <script>
 
-    function getData(url) {
-        return axios.get(url).then(response => response.data)
-    }
+   wiki_url = "https://en.wikipedia.org/api/rest_v1/page/summary/"
+   let xhr = new XMLHttpRequest();
+   docs = ""
 
-    function get_similarity(doc1, doc2){
+   function set_data(sim,d1,d2){
+        document.getElementById('sim').innerHTML = sim+"%"
+        document.getElementById('teacher_data').innerHTML = d1
+        document.getElementById('student_data').innerHTML = d2
+   }
 
-    }
+   function getData(url) {
+     return axios.get(url).then(response => response.data)
+   }
 
-    getData("/teacher/get_similarity_data/{{book}}/{{chapter}}")
-    .then(function(res){
-        docs=""
+   function get_text_similarity(d1,d2){
+
+
+        axios.request(options).then(function (response) {
+            console.log(response.data);
+        }).catch(function (error) {
+            console.error(error);
+        });
+   }
+
+  getData("/do_similarity/{{book}}/{{chapter}}/{{sub}}")
+    .then(function(response){
+        console.log(response)
+        docs1=""
         count=0
-        ll = res.length
-        for(i=0;i<res.length;i++){
+        ll = response.length-1
+        docs2 = response[response.length-1]
 
-            axios.get(wiki_endpoint+res[i]).then(res=>{
+        for(i=0;i<response.length-1;i++){
+
+            axios.get(wiki_endpoint+response[i]).then(res=>{
             text = res.data['extract']+'\n'
-            docs += text
+            docs1 += text
             count += 1
 
             if(count == ll){
-                console.log(docs)
 
+                console.log(docs1)
+                console.log(docs2)
+
+                //api call
+                    var options = {
+                        method: 'GET',
+                        url: 'https://twinword-text-similarity-v1.p.rapidapi.com/similarity/',
+                        params: {
+                            text1: docs1,
+                            text2: docs2
+                        },
+                        headers: {
+                            'x-rapidapi-host': 'twinword-text-similarity-v1.p.rapidapi.com',
+                            'x-rapidapi-key': '13bfdfa928msh8797f10a8a0fefbp112342jsna428d30ccb4c'
+                            }
+                        };
+
+                     axios.request(options).then(function (response) {
+                         sim = response.data['similarity'];
+                         sim = parseFloat(sim*100).toFixed(2)
+                         console.log(sim)
+                         set_data(sim+"",docs1,docs2)
+                         axios.get("/teacher_update_submissions/{{sub}}?score="+sim)
+                     }).catch(function (error) {
+                         console.error(error);
+                     });
+                //
             }
 
             })
             }
         })
+
+
+
+
+
+
+
+
+
+
+
 
 
 
