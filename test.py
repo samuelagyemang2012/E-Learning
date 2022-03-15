@@ -60,8 +60,11 @@ students = user_model.get_students()
 # print(res.name)
 
 # wiki = "https://en.wikipedia.org/api/rest_v1/page/summary/Eukaryotic_Cells"
-import json
-
-s = ["a", "b", "c"]
-r = json.dumps(s)
-print(r)
+# import json
+#
+# s = ["a", "b", "c"]
+# r = json.dumps(s)
+# print(r)
+from flask_bcrypt import generate_password_hash
+hash = generate_password_hash("12345")
+print(hash)

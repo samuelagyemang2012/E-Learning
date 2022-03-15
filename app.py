@@ -69,6 +69,7 @@ def index():
 
         # is teacher
         if is_teacher == 'on':
+            student_id = ''
             username = re.sub(strip_tags, "", username)
             if len(username) == 0 or len(password) == 0:
                 return render_template('UI/index.html', auth_message="Invalid login credentials")
@@ -79,6 +80,8 @@ def index():
 
             # user_id, name, role_id\
         res = user_controller.login(username, student_id, password)
+
+        print(res)
 
         if not res:
             return render_template('UI/index.html', auth_message="Invalid login credentials")
@@ -317,7 +320,7 @@ def view_cummulative_similarity(book_id):
 
     return render_template('UI/student/books/cumulative.html', data=book_chapters,
                            book=book.name,
-                           score=str(total_score)+"%")
+                           score=str(total_score) + "%")
 
 
 @app.route('/student/book/chapter/graph/<chapter>/<id>')

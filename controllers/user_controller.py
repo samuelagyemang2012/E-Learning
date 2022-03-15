@@ -10,17 +10,29 @@ class UserController:
         pass
 
     def login(self, username, student_id, password):
-        user = User.query.filter(
-            or_(User.username == username, User.student_id == student_id)
-            # and_(User.password == password)
-        ).first()
 
-        if user is not None:
-            if user.student_id == student_id or user.username == username and check_password_hash(user.password,
-                                                                                                  password):
-                return user.id, user.role_id
+        if len(username) > 0:
+            user = User.query.filter(
+                or_(User.username == username)
+                # and_(User.password == password)
+            ).first()
+
+            if user is not None:
+                if user.username == username and check_password_hash(user.password, password):
+                    return user.id, user.role_id
             else:
                 return False
+        elif len(username) == 0:
+            student = User.query.filter(
+                or_(User.student_id == student_id)
+            ).first()
+
+            if student is not None:
+                if student.student_id == student_id and check_password_hash(student.password, password):
+                    return student.id, student.role_id
+            else:
+                return False
+
         return False
 
     def register(self, username, student_id, password, name, role_id):
