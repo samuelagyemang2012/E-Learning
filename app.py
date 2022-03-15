@@ -235,6 +235,7 @@ def view_student_graph(sname):
 
     if request.accept_mimetypes.best == "application/json":
         json_data = g.display_graph(data_path, "dd", False)
+        # print(json_data)
         return str(json_data)
 
     return render_template("UI/teacher/submissions/student_graph.html", data=sname)
