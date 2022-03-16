@@ -1,0 +1,31 @@
+{% extends "UI/student/student_base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="text-center">
+        <p style="color: #DC392D">{{ message }}</p>
+        {% with messages = get_flashed_messages() %}
+        {% if (messages) %}
+        <p style="color: ##1cc88a">{{ messages[0] }}</p>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <form class="user" method="post" action="/student/posts/add">
+        <div class="col-sm-8">
+            <div class="form-group">
+                <label for="post"></label>
+                <textarea required class="form-control" name="post" id="post" rows="7" style="width: 800px"
+                          placeholder="Write Something"></textarea>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <button type="submit" class="btn btn-primary " style="float: right;">
+                Post
+            </button>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

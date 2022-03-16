@@ -12,6 +12,7 @@ from controllers.user_controller import UserController
 from controllers.book_controller import BookController
 from controllers.chapter_controller import ChapterController
 from controllers.submission_controller import SubmissionController
+from controllers.comment_controller import CommentController
 from datetime import date
 import uuid
 import validation.validation as v
@@ -51,6 +52,7 @@ user_controller = UserController()
 book_controller = BookController()
 chapter_controller = ChapterController()
 submission_controller = SubmissionController()
+comment_controller = CommentController()
 
 
 # Base
@@ -406,6 +408,34 @@ def get_pending_submissions():
 def get_checked_submissions():
     checked = submission_model.student_get_checked(session.get('user_id'))
     return render_template('UI/student/submissions/checked.html', data=checked)
+
+
+@app.route('/student/posts')
+def view_posts():
+    posts = comment_controller.get_posts()
+    return render_template('UI/student/comments/view_posts.html', data=posts)
+
+
+@app.route('/student/posts/add', methods=['GET', 'POST'])
+def add_post():
+    if request.method == "POST":
+        strip_tags = re.compile('<.*?>')
+        comment = request.form.get("post").strip()
+        comment = re.sub(strip_tags, "", comment)
+        comment = comment.strip()
+
+        if len(comment) == 0:
+            return render_template('UI/student/comments/add.html', message="A post cannot be empty")
+
+        user_id = session.get('user_id')
+        res = comment_controller.add_comment(user_id, comment)
+
+        if not res:
+            return render_template('UI/student/comments/add.html', message="Something happened. Try again later!")
+        else:
+            return redirect(url_for('view_posts'))
+
+    return render_template('UI/student/comments/add.html')
 
 
 # ---------------------------------------------------------------------

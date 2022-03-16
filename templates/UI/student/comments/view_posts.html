@@ -1,0 +1,29 @@
+{% extends "UI/student/student_base.html" %}
+
+{% block content %}
+<div class="container">
+
+    <div class="col-sm-10">
+        {% for post in data %}
+        <div class="card" style="padding: 10px">
+            <div class="row">
+                <!-- Grid column -->
+                <div class="col-sm-12">
+                    <div class="">
+                        <div class="media-body" style="text-align:justify">
+                            {{ post.comment }}
+                        </div>
+                    </div>
+                    <div>
+                        <a style="float: right" class="" href="/">View replies</a>
+                    </div>
+                </div>
+                <!-- Grid column -->
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}
