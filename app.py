@@ -13,6 +13,7 @@ from controllers.book_controller import BookController
 from controllers.chapter_controller import ChapterController
 from controllers.submission_controller import SubmissionController
 from controllers.comment_controller import CommentController
+from controllers.response_controller import ResponseController
 from datetime import date
 import uuid
 import validation.validation as v
@@ -53,13 +54,12 @@ book_controller = BookController()
 chapter_controller = ChapterController()
 submission_controller = SubmissionController()
 comment_controller = CommentController()
+response_controller = ResponseController()
 
 
 # Base
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    strip_tags = re.compile('<.*?>')
-
     if request.method == 'GET':
         return render_template('UI/index.html')
     else:
@@ -72,11 +72,11 @@ def index():
         # is teacher
         if is_teacher == 'on':
             student_id = ''
-            username = re.sub(strip_tags, "", username)
+            username = v.strip_tags(username)
             if len(username) == 0 or len(password) == 0:
                 return render_template('UI/index.html', auth_message="Invalid login credentials")
         else:  # is student
-            student_id = re.sub(strip_tags, "", student_id)
+            student_id = v.strip_tags(student_id)
             if len(student_id) == 0 or len(password) == 0:
                 return render_template('UI/index.html', auth_message="Invalid login credentials")
 
@@ -155,6 +155,11 @@ def register():
     # return render_template('UI/register.html')
 
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('index'))
+
 # ---------------------------------------------------------------------
 # Teacher Routes
 
@@ -166,7 +171,6 @@ def teacher_dashboard():
 @app.route('/teacher/books/add', methods=['GET', 'POST'])
 def add_book():
     invalid_files = []
-    strip_tags = re.compile('<.*?>')
 
     if request.method == 'GET':
         return render_template('UI/teacher/books/add.html')
@@ -174,7 +178,7 @@ def add_book():
         title = request.form.get('title').strip()
         chapters = request.files.getlist("files[]")
 
-        title = re.sub(strip_tags, "", title)
+        title = v.strip_tags(title)
 
         if len(title) == 0:
             return render_template('UI/teacher/add.html', message='Please provide a title')
@@ -296,7 +300,8 @@ def update_submission(sub_name):
 @app.route('/student/books')
 def student_view_books():
     books = book_model.all()
-    return render_template('UI/student/books/view_books.html', data=books)
+    user = user_model.get(session.get('user_id'))
+    return render_template('UI/student/books/view_books.html', data=books, user=user)
 
 
 @app.route('/student/book/similarity/<book_id>')
@@ -419,10 +424,9 @@ def view_posts():
 @app.route('/student/posts/add', methods=['GET', 'POST'])
 def add_post():
     if request.method == "POST":
-        strip_tags = re.compile('<.*?>')
+
         comment = request.form.get("post").strip()
-        comment = re.sub(strip_tags, "", comment)
-        comment = comment.strip()
+        comment = v.strip_tags(comment)
 
         if len(comment) == 0:
             return render_template('UI/student/comments/add.html', message="A post cannot be empty")
@@ -436,6 +440,32 @@ def add_post():
             return redirect(url_for('view_posts'))
 
     return render_template('UI/student/comments/add.html')
+
+
+@app.route('/student/posts/<id>')
+def view_post(id):
+    post = comment_controller.get_post(id)
+    user = user_model.get(post.user_id)
+
+    responses = response_controller.get_responses(id)
+    return render_template('UI/student/responses/add_response.html', post=post, user=user, responses=responses)
+
+
+@app.route('/student/posts/my')
+def view_my_post():
+    posts = comment_controller.get_user_posts(session.get('user_id'))
+    return render_template('UI/student/comments/my_posts.html', data=posts)
+
+
+@app.route('/student/response/post/<id>/add', methods=['POST'])
+def add_response(id):
+    reply = request.form.get("reply").strip()
+    reply = v.strip_tags(reply)
+    user_id = session.get('user_id')
+
+    response_controller.add_response(id, user_id, reply)
+
+    return redirect(url_for('view_post', id=id))
 
 
 # ---------------------------------------------------------------------

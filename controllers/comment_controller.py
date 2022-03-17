@@ -1,4 +1,5 @@
 from migrations.comment_migration import Comment
+from migrations.user_migration import User
 from models.comment_model import CommentModel
 from models.chapter_model import ChapterModel
 from sqlalchemy import or_, and_
@@ -16,6 +17,21 @@ class CommentController:
         res = Comment.query.filter_by(user_id=user_id).first()
         return res.id
 
+    def get_user_posts(self, user_id):
+        comments = Comment.query.filter_by(user_id=user_id).all()
+        return comments
+
     def get_posts(self):
-        posts = Comment.query.filter_by().all()
-        return posts
+        comments = Comment.query. \
+            join(User, Comment.user_id == User.id). \
+            add_columns(Comment.id.label("id"),
+                        User.name.label("name"),
+                        Comment.comment.label("comment"),
+                        Comment.created_on.label("created_on")
+                        ). \
+            filter().all()
+        return comments
+
+    def get_post(self, cid):
+        post = Comment.query.filter_by(id=cid).first()
+        return post

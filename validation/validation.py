@@ -23,3 +23,8 @@ def compare_passwords(p1, p2):
         return True
     else:
         return False
+
+
+def strip_tags(data):
+    strip = re.compile('<.*?>')
+    return re.sub(strip, "", data)
