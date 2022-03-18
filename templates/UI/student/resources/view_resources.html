@@ -1,0 +1,32 @@
+{% extends "UI/student/student_base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        {% for d in data %}
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 style="color:#4E73DF" class="card-title small">{{d.r_name.capitalize()}}</h5>
+                    <hr>
+                    <p class="card-text">{{d.desc.capitalize()}}</p>
+                    <hr>
+                    <div>
+                        <span class="small">Uploaded by {{d.u_name}}</span>
+                        <span style="float:right" class="small">Downloaded <span
+                                style="color:#4E73DF">{{d.downloads}}</span> times</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a target="_blank" href="/student/resource/download/{{d.resource_id}}" style="float:right" class="">Download</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+
+{% endblock %}

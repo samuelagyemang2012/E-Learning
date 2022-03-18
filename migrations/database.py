@@ -15,5 +15,5 @@ def init_db():
     # you will have to import them first before calling init_db()
 
     from migrations import book_migration, chapter_migration, roles_migration, user_migration, submission_migration, \
-        response_migration, comment_migration
+        response_migration, comment_migration, resource_migration
     Base.metadata.create_all(bind=engine)

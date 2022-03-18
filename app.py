@@ -1,19 +1,21 @@
 import json
 import os
 from flask import Flask, session
-from flask import render_template, flash, request, redirect, url_for
+from flask import render_template, flash, request, redirect, url_for, send_from_directory
 from engine.graphs import Graphs
 from os.path import join, dirname, realpath
 from models.user_model import UserModel
 from models.book_model import BookModel
 from models.submission_model import SubmissionModel
 from models.chapter_model import ChapterModel
+from models.resource_model import ResourceModel
 from controllers.user_controller import UserController
 from controllers.book_controller import BookController
 from controllers.chapter_controller import ChapterController
 from controllers.submission_controller import SubmissionController
 from controllers.comment_controller import CommentController
 from controllers.response_controller import ResponseController
+from controllers.resource_controller import ResourceController
 from datetime import date
 import uuid
 import validation.validation as v
@@ -27,6 +29,7 @@ import re
 JSON_PATH = join(dirname(realpath(__file__)), "books\\json\\")
 UPLOADS_PATH = join(dirname(realpath(__file__)), 'books\\xml\\')
 SUBMISSION_PATH = join(dirname(realpath(__file__)), 'submissions\\')
+RESOURCES_PATH = join(dirname(realpath(__file__)), 'resources\\')
 cur_file = ""
 
 # flask
@@ -37,6 +40,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = config.SECRET_KEY
 app.config['UPLOAD_FOLDER'] = UPLOADS_PATH
 app.config['SUBMISSION_FOLDER'] = SUBMISSION_PATH
+app.config['RESOURCE_FOLDER'] = RESOURCES_PATH
 
 # # Graph object
 g = Graphs()
@@ -48,6 +52,7 @@ user_model = UserModel()
 book_model = BookModel()
 chapter_model = ChapterModel()
 submission_model = SubmissionModel()
+resource_model = ResourceModel()
 
 user_controller = UserController()
 book_controller = BookController()
@@ -55,6 +60,7 @@ chapter_controller = ChapterController()
 submission_controller = SubmissionController()
 comment_controller = CommentController()
 response_controller = ResponseController()
+resource_controller = ResourceController()
 
 
 # Base
@@ -159,6 +165,7 @@ def register():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
 
 # ---------------------------------------------------------------------
 # Teacher Routes
@@ -466,6 +473,46 @@ def add_response(id):
     response_controller.add_response(id, user_id, reply)
 
     return redirect(url_for('view_post', id=id))
+
+
+@app.route('/student/resource/view_resources')
+def view_resources():
+    resources = resource_controller.get_resources()
+    return render_template('UI/student/resources/view_resources.html', data=resources)
+
+
+@app.route('/student/resource/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST':
+        files = request.files.getlist("files[]")
+        desc = request.form.get("description").strip()
+        desc = v.strip_tags(desc)
+
+        if len(desc) == 0 or len(files) == 0:
+            return render_template('UI/student/resources/upload.html', message="Error uploading resource")
+
+        for f in files:
+            user_id = session.get('user_id')
+            ext = f.filename.split(".")[1].lower()
+            name = f.filename.split(".")[0].lower()
+            resource_id = uuid.uuid4().hex
+            f.filename = resource_id + "." + ext
+
+            f.save(app.config['RESOURCE_FOLDER'] + "//" + f.filename.lower())
+            resource_controller.upload(user_id, name, resource_id + "." + ext, desc)
+
+            return render_template('UI/student/resources/upload.html', success='Resource added')
+
+    return render_template('UI/student/resources/upload.html')
+
+
+@app.route('/student/resource/download/<rid>')
+def download(rid):
+    resource = resource_model.get(rid)
+    num_downloads = resource.downloads + 1
+    resource_controller.update_downloads(rid, num_downloads)
+
+    return send_from_directory(app.config['RESOURCE_FOLDER'], rid)
 
 
 # ---------------------------------------------------------------------
