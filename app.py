@@ -338,10 +338,48 @@ def view_cummulative_similarity(book_id):
                            score=str(total_score) + "%")
 
 
-@app.route('/student/book/chapter/graph/<chapter>/<id>')
+@app.route('/student/posts/add', methods=['GET', 'POST'])
+def add_post():
+    if request.method == "POST":
+        chapter_id = request.form.get("chapter_id")
+        comment = request.form.get("post").strip()
+        comment = v.strip_tags(comment)
+
+        if len(comment) == 0:
+            return render_template('UI/student/comments/add.html', message="A post cannot be empty")
+
+        user_id = session.get('user_id')
+        res = comment_controller.add_comment(user_id, chapter_id, comment)
+
+        chapter_data = chapter_model.get(chapter_id)
+        book = book_model.get(chapter_data.book_id)
+        posts = comment_controller.get_chapter_posts(chapter_id)
+
+        data_path = JSON_PATH + book.name + "/" + chapter_data.name + ".json"
+
+        if request.accept_mimetypes.best == "application/json":
+            json_data = g.display_graph(data_path, "dd", False)
+            return str(json_data)
+
+        return render_template('UI/student/graph.html',
+                               chapter_id=chapter_data.id,
+                               chapter=chapter_data.name.capitalize(),
+                               book_id=chapter_data.book_id,
+                               posts=posts)
+
+        # if not res:
+        #     return render_template('UI/student/comments/add.html', message="Something happened. Try again later!")
+        # else:
+        #     return redirect(url_for('view_posts'))
+
+    return render_template('UI/student/comments/add.html')
+
+
+@app.route('/student/book/chapter/graph/<chapter>/<id>', methods=['GET', 'POST'])
 def student_view_graph(chapter, id):
     chapter_data = chapter_model.get(id)
     book = book_model.get(chapter_data.book_id)
+    posts = comment_controller.get_chapter_posts(id)
 
     data_path = JSON_PATH + book.name + "/" + chapter + ".json"
 
@@ -349,7 +387,27 @@ def student_view_graph(chapter, id):
         json_data = g.display_graph(data_path, "dd", False)
         return str(json_data)
 
-    return render_template('UI/student/graph.html', chapter=chapter.capitalize(), book_id=chapter_data.book_id)
+    # if request.method == 'POST':
+    #     chapter_id = request.form.get("chapter_id")
+    #     comment = request.form.get("post").strip()
+    #     comment = v.strip_tags(comment)
+    #
+    #     if len(comment) == 0:
+    #         return render_template('UI/student/comments/add.html', message="A post cannot be empty")
+    #
+    #     user_id = session.get('user_id')
+    #     res = comment_controller.add_comment(user_id, chapter_id, comment)
+    #
+    #     if not res:
+    #         return render_template('UI/student/comments/add.html', message="Something happened. Try again later!")
+    #     else:
+    #         return redirect(url_for('view_posts'))
+
+    return render_template('UI/student/graph.html',
+                           chapter_id=chapter_data.id,
+                           chapter=chapter.capitalize(),
+                           book_id=chapter_data.book_id,
+                           posts=posts)
 
 
 @app.route('/student/book/chapters/<id>')
@@ -428,27 +486,6 @@ def view_posts():
     return render_template('UI/student/comments/view_posts.html', data=posts)
 
 
-@app.route('/student/posts/add', methods=['GET', 'POST'])
-def add_post():
-    if request.method == "POST":
-
-        comment = request.form.get("post").strip()
-        comment = v.strip_tags(comment)
-
-        if len(comment) == 0:
-            return render_template('UI/student/comments/add.html', message="A post cannot be empty")
-
-        user_id = session.get('user_id')
-        res = comment_controller.add_comment(user_id, comment)
-
-        if not res:
-            return render_template('UI/student/comments/add.html', message="Something happened. Try again later!")
-        else:
-            return redirect(url_for('view_posts'))
-
-    return render_template('UI/student/comments/add.html')
-
-
 @app.route('/student/posts/<id>')
 def view_post(id):
     post = comment_controller.get_post(id)
@@ -458,10 +495,12 @@ def view_post(id):
     return render_template('UI/student/responses/add_response.html', post=post, user=user, responses=responses)
 
 
-@app.route('/student/posts/my')
-def view_my_post():
-    posts = comment_controller.get_user_posts(session.get('user_id'))
-    return render_template('UI/student/comments/my_posts.html', data=posts)
+#
+#
+# @app.route('/student/posts/my')
+# def view_my_post():
+#     posts = comment_controller.get_user_posts(session.get('user_id'))
+#     return render_template('UI/student/comments/my_posts.html', data=posts)
 
 
 @app.route('/student/response/post/<id>/add', methods=['POST'])

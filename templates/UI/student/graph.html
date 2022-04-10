@@ -35,7 +35,75 @@
             </div>
         </div>
     </div>
+    <!--    ##########################-->
+</div>
 
+<!--#############-->
+<div class="row" style="padding:5px">
+    <div class="text-center">
+        <p style="color: #DC392D">{{ message }}</p>
+        {% with messages = get_flashed_messages() %}
+        {% if (messages) %}
+        <p style="color: ##1cc88a">{{ messages[0] }}</p>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <form class="user" method="post" action="/student/posts/add">
+        <div class="col-sm-8">
+            <input name="chapter_id" value="{{chapter_id}}" hidden>
+            <div class="form-group">
+                <label for="post"></label>
+                <textarea required class="form-control" name="post" id="post" rows="7" style="width: 800px"
+                          placeholder="Write Something"></textarea>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin:10px">Post</button>
+    </form>
+</div>
+
+<!--#############-->
+
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Comments</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div>
+                    {% for post in posts %}
+                    <div class="card" style="padding: 10px">
+                        <div class="row">
+                            <!-- Grid column -->
+                            <div class="col-sm-12">
+                                <div class="">
+                                    <div>
+                                        <h6>Posted by
+                                            <span style="color:#4E73DF">{{post.name}}</span>
+                                            <span style="float:right; color:#4E73DF" class="small">{{post.created_on}}</span>
+                                        </h6>
+                                    </div>
+                                    <div class="media-body" style="text-align:justify">
+                                        {{post.comment}}
+                                    </div>
+                                </div>
+                                <div>
+                                    <a style="float: right" class="" href="/student/posts/{{post.id}}">View
+                                        replies</a>
+                                </div>
+                            </div>
+                            <!-- Grid column -->
+                        </div>
+                    </div>
+                    <br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -58,6 +126,23 @@
     xhr.open("GET", "/student/book/chapter/graph/{{chapter}}/{{book_id}}",true);
     xhr.setRequestHeader('Accept', 'application/json');
     xhr.send();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 {% endblock %}
